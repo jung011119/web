@@ -11,38 +11,46 @@ def NotifyAndRerun():
 def Calculator():
     
     st.title("계산기 (feat.Jay)")
-    col1, col2_1, col2_2, col2_3, col2_4, col3 = st.columns([2,.5,.5,.5,.5,2])
+    col1, col2_1, col2_2, col2_3, col2_4, col3 = st.columns([2,.8,.8,.8,1,2])
+    
+    num1, num2 = 0,0
+    
     with col1:
-        num1 = st.number_input("firstNum")
+        num1 = st.number_input("1번째 숫자", None, None, 0.0, 1.0)
     with col2_1:
-        plus = st.button("+")
+        plus = st.button("덧셈")
     with col2_2:
-        minus = st.button("-")
+        minus = st.button("뺄셈")
     with col2_3:
-        dup = st.button("*")
+        dup = st.button("곱셈")
     with col2_4:
-        div = st.button("/")
+        div = st.button("나눗셈")
     with col3:
-        num2 = st.number_input("secondNum")
+        num2 = st.number_input("2번째 숫자", None, None, 0.0, 1.0)
 
-    confirm = st.button("계산")
 
-    if confirm:
-        if plus:
-            result = num1+num2
-        if minus:
-            result = num1-num2
-        if dup:
-            result = num1*num2
-        if div:
-            result = num1/num2
-        else:
-            st.error("부호가 선택되지 않음")
-            return
-        st.write(result)    
-
-def Warning(text):
-    st.warning(text)
+    if plus:
+        operation = "+"
+        result = num1+num2
+        st.success(f"{num1} {operation} {num2} = {result}")
+        db.collection("calculator").add({"digit1":num1, "digit2":num2, "calc":operation, "result":result, "at":firestore.SERVER_TIMESTAMP})
+    elif minus:
+        operation = "-"
+        result = num1-num2
+        st.success(f"{num1} {operation} {num2} = {result}")
+        db.collection("calculator").add({"digit1":num1, "digit2":num2, "calc":operation, "result":result, "at":firestore.SERVER_TIMESTAMP})
+    elif dup:
+        operation = "*"
+        result = num1*num2
+        st.success(f"{num1} {operation} {num2} = {result}")
+        db.collection("calculator").add({"digit1":num1, "digit2":num2, "calc":operation, "result":result, "at":firestore.SERVER_TIMESTAMP})
+    elif div:
+        operation = "/"
+        result = num1/num2
+        st.success(f"{num1} {operation} {num2} = {result}")
+        db.collection("calculator").add({"digit1":num1, "digit2":num2, "calc":operation, "result":result, "at":firestore.SERVER_TIMESTAMP})
+    else:
+        st.write("사칙연산 버튼을 눌러주세요.")
 
 cred = credentials.Certificate("key.json")
 if not firebase_admin._apps:
