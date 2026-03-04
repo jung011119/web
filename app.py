@@ -1,4 +1,4 @@
-import streamlit as st  #streamlit run web.py
+import streamlit as st  #streamlit run app.py
 import firebase_admin
 from firebase_admin import credentials, firestore
 
