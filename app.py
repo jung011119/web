@@ -1,6 +1,7 @@
 import streamlit as st  #streamlit run app.py
 import firebase_admin
 from firebase_admin import credentials, firestore
+import json
 
 import time
 
@@ -52,7 +53,9 @@ def Calculator():
     else:
         st.write("사칙연산 버튼을 눌러주세요.")
 
-cred = credentials.Certificate("key.json")
+key_dict = json.loads(st.secrets["firebase_key"])
+cred = credentials.Certificate(key_dict)
+
 if not firebase_admin._apps:
    firebase_admin.initialize_app(cred)
 db = firestore.client()
